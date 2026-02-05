@@ -62,17 +62,15 @@ if (whatsappBtn) {
     });
 }
 
-// YouTube Video Modal
-const youtubeModal = document.getElementById('youtubeModal');
-const modalYoutube = document.getElementById('modalYoutube');
+// YouTube videos are now embedded directly in the gallery items
+// Close modal functionality for appointment modal
 const closeButtons = document.querySelectorAll('.close');
 
 closeButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
         const modal = e.target.closest('.modal');
-        modal.style.display = 'none';
-        if (modalYoutube && modalYoutube.src) {
-            modalYoutube.src = '';
+        if (modal) {
+            modal.style.display = 'none';
         }
     });
 });
@@ -80,16 +78,8 @@ closeButtons.forEach(btn => {
 window.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal')) {
         e.target.style.display = 'none';
-        if (youtubeModal && youtubeModal.style.display !== 'none' && modalYoutube) {
-            modalYoutube.src = '';
-        }
     }
 });
-
-function playYoutubeVideo(videoId, title) {
-    youtubeModal.style.display = 'block';
-    modalYoutube.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-}
 
 // Appointment Form Submission
 const appointmentForm = document.getElementById('appointmentForm');

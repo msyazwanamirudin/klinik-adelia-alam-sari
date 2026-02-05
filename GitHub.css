@@ -162,7 +162,7 @@ body.dark-mode .navbar {
 .hero {
     position: relative;
     height: 600px;
-    background: url('bg.webp') center/cover no-repeat;
+    background: url('img/bg.webp') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -518,9 +518,18 @@ body.dark-mode .gallery-container h2 {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     max-width: 100%;
+    margin-bottom: 2rem;
+}
+
+.gallery-grid-centered {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 650px;
+    margin: 0 auto;
 }
 
 .gallery-item {
@@ -1525,6 +1534,11 @@ body.dark-mode .footer {
 
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+
+    .gallery-grid-centered {
+        grid-template-columns: 1fr;
+        max-width: 100%;
     }
 
     .about-container {

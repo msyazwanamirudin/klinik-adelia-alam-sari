@@ -649,6 +649,13 @@ body.dark-mode .gallery-item {
     padding: 2rem;
     text-align: center;
     color: white;
+    pointer-events: none;
+}
+
+.gallery-item:has(video) .gallery-overlay {
+    display: none;
+}
+    color: white;
 }
 
 .gallery-item:hover .gallery-overlay {

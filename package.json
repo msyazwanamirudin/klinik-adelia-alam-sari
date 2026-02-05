@@ -1,0 +1,27 @@
+{
+  "name": "klinik-adelia-alam-sari",
+  "version": "1.0.0",
+  "description": "Professional healthcare clinic website with multi-language support and responsive design",
+  "main": "index.js",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clinic",
+    "healthcare",
+    "medical services",
+    "responsive design",
+    "multi-language"
+  ],
+  "author": "Klinik Adelia Alam Sari",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/klinik-adelia-alam-sari.git"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

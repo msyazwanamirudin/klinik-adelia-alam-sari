@@ -176,4 +176,232 @@ window.addEventListener('scroll', () => {
 // Page Load Complete
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Klinik Adelia Alam Sari Landing Page Loaded Successfully!');
+    symptomChecker.init();
 });
+
+// ============= SYMPTOM CHECKER FUNCTIONALITY =============
+
+const symptomChecker = {
+    selectedSymptoms: [],
+    
+    init() {
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const symptomInputs = document.querySelectorAll('.symptom-input');
+        
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', () => this.analyzeSymptoms());
+        }
+        
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => this.resetChecker());
+        }
+        
+        symptomInputs.forEach(input => {
+            input.addEventListener('change', (e) => this.updateSelectedSymptoms());
+        });
+    },
+    
+    updateSelectedSymptoms() {
+        const inputs = document.querySelectorAll('.symptom-input:checked');
+        this.selectedSymptoms = Array.from(inputs).map(input => input.value);
+    },
+    
+    analyzeSymptoms() {
+        this.updateSelectedSymptoms();
+        
+        if (this.selectedSymptoms.length === 0) {
+            this.showAlert(
+                currentLanguage === 'en' 
+                    ? 'Please select at least one symptom' 
+                    : 'Sila pilih sekurang-kurangnya satu gejala'
+            );
+            return;
+        }
+        
+        const result = this.calculateRisk();
+        this.displayResult(result);
+    },
+    
+    calculateRisk() {
+        const symptoms = this.selectedSymptoms;
+        const feverIndex = symptoms.includes('fever') ? 1 : 0;
+        const headacheIndex = symptoms.includes('headache') ? 1 : 0;
+        const jointIndex = symptoms.includes('joint') ? 1 : 0;
+        const rashIndex = symptoms.includes('rash') ? 1 : 0;
+        const nauseaIndex = symptoms.includes('nausea') ? 1 : 0;
+        const bleedingIndex = symptoms.includes('bleeding') ? 1 : 0;
+        
+        const classicSymptoms = feverIndex + headacheIndex + jointIndex;
+        const severeSymptoms = rashIndex + nauseaIndex + bleedingIndex;
+        const totalScore = classicSymptoms + severeSymptoms;
+        
+        let riskLevel = 'low';
+        let riskScore = 0;
+        
+        if (severeSymptoms >= 2 || bleedingIndex === 1) {
+            riskLevel = 'high';
+            riskScore = 3;
+        } else if (classicSymptoms >= 3 || (classicSymptoms >= 2 && severeSymptoms >= 1)) {
+            riskLevel = 'medium';
+            riskScore = 2;
+        } else {
+            riskLevel = 'low';
+            riskScore = 1;
+        }
+        
+        return {
+            riskLevel,
+            riskScore,
+            symptomsCount: this.selectedSymptoms.length,
+            symptoms: this.selectedSymptoms,
+            hasClassicSymptoms: classicSymptoms,
+            hasSevereSymptoms: severeSymptoms
+        };
+    },
+    
+    displayResult(result) {
+        const resultContainer = document.getElementById('resultContainer');
+        const resultContent = document.getElementById('resultContent');
+        
+        const enRiskLabels = {
+            low: '✓ Low Risk',
+            medium: '⚠ Medium Risk',
+            high: '🚨 High Risk'
+        };
+        
+        const bmRiskLabels = {
+            low: '✓ Risiko Rendah',
+            medium: '⚠ Risiko Sederhana',
+            high: '🚨 Risiko Tinggi'
+        };
+        
+        const riskLabels = currentLanguage === 'en' ? enRiskLabels : bmRiskLabels;
+        
+        const enDescriptions = {
+            low: 'Your symptoms suggest a low risk of dengue fever. However, continue monitoring your health.',
+            medium: 'Your symptoms suggest a medium risk. Please consult with our medical professionals for proper evaluation.',
+            high: 'Your symptoms suggest a high risk of dengue fever. Seek immediate medical attention.'
+        };
+        
+        const bmDescriptions = {
+            low: 'Gejala Anda menunjukkan risiko rendah demam denggi. Namun, terus pantau kesehatan Anda.',
+            medium: 'Gejala Anda menunjukkan risiko sederhana. Sila konsultasikan dengan profesional medis kami untuk evaluasi yang tepat.',
+            high: 'Gejala Anda menunjukkan risiko tinggi demam denggi. Cari perhatian medis segera.'
+        };
+        
+        const descriptions = currentLanguage === 'en' ? enDescriptions : bmDescriptions;
+        
+        const recommendations = this.getRecommendations(result);
+        
+        let html = `
+            <div class="risk-level risk-${result.riskLevel}">
+                ${riskLabels[result.riskLevel]}
+            </div>
+            <h3 class="result-title">${currentLanguage === 'en' ? 'Analysis Result' : 'Hasil Analisis'}</h3>
+            <p class="result-description">${descriptions[result.riskLevel]}</p>
+            <div class="recommendations">
+                <h4>${currentLanguage === 'en' ? 'Recommendations:' : 'Rekomendasi:'}</h4>
+                <ul>
+        `;
+        
+        recommendations.forEach(rec => {
+            html += `<li>${rec}</li>`;
+        });
+        
+        html += `
+                </ul>
+            </div>
+        `;
+        
+        if (result.riskLevel !== 'low') {
+            html += `
+                <button class="action-button" onclick="symptomChecker.bookAppointment()">
+                    ${currentLanguage === 'en' ? '📋 Book Appointment' : '📋 Jadwalkan Janji'}
+                </button>
+            `;
+        }
+        
+        resultContent.innerHTML = html;
+        resultContainer.classList.remove('d-none');
+        
+        // Scroll to result
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    },
+    
+    getRecommendations(result) {
+        const enRecs = {
+            low: [
+                'Continue to monitor your health',
+                'Maintain good hygiene practices',
+                'Use mosquito repellent to prevent dengue',
+                'Stay hydrated and get adequate rest',
+                'If symptoms worsen, visit our clinic'
+            ],
+            medium: [
+                'Visit our clinic for a proper medical evaluation',
+                'Get a complete blood count (CBC) test',
+                'Rest and increase fluid intake',
+                'Monitor your temperature regularly',
+                'Avoid strenuous activities until evaluated'
+            ],
+            high: [
+                'Seek immediate medical attention at our clinic or hospital',
+                'Get approved blood tests (Dengue NS1, IgM, IgG)',
+                'Stay well hydrated to prevent complications',
+                'Monitor for warning signs like severe bleeding',
+                'Avoid self-medication, consult medical professionals'
+            ]
+        };
+        
+        const bmRecs = {
+            low: [
+                'Terus pantau kesehatan Anda',
+                'Pertahankan amalan kebersihan yang baik',
+                'Gunakan penolak nyamuk untuk mencegah demam denggi',
+                'Tetap terhidrasi dan istirahat yang cukup',
+                'Jika gejala memburuk, kunjungi klinik kami'
+            ],
+            medium: [
+                'Kunjungi klinik kami untuk evaluasi medis yang tepat',
+                'Dapatkan tes jumlah sel darah lengkap (CBC)',
+                'Istirahat dan tingkatkan asupan cairan',
+                'Pantau suhu badan Anda secara teratur',
+                'Hindari aktivitas berat sampai dievaluasi'
+            ],
+            high: [
+                'Cari perhatian medis segera di klinik atau rumah sakit kami',
+                'Dapatkan tes darah yang disetujui (Dengue NS1, IgM, IgG)',
+                'Tetap terhidrasi dengan baik untuk mencegah komplikasi',
+                'Pantau tanda-tanda peringatan seperti pendarahan parah',
+                'Hindari pengobatan sendiri, konsultasikan dengan profesional medis'
+            ]
+        };
+        
+        return currentLanguage === 'en' ? enRecs[result.riskLevel] : bmRecs[result.riskLevel];
+    },
+    
+    resetChecker() {
+        document.querySelectorAll('.symptom-input').forEach(input => {
+            input.checked = false;
+        });
+        
+        document.getElementById('resultContainer').classList.add('d-none');
+        this.selectedSymptoms = [];
+        
+        // Scroll back to top of checker
+        document.querySelector('.symptom-checker-section').scrollIntoView({ behavior: 'smooth' });
+    },
+    
+    bookAppointment() {
+        const modal = document.getElementById('appointmentModal');
+        if (modal) {
+            modal.style.display = 'block';
+            modal.scrollIntoView({ behavior: 'smooth' });
+        }
+    },
+    
+    showAlert(message) {
+        alert(message);
+    }
+};

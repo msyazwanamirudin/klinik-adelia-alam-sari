@@ -28,9 +28,14 @@ body.dark-mode {
     color: var(--text-dark);
 }
 
+/* Utility Classes */
+.d-none {
+    display: none;
+}
+
 /* Navigation Bar */
 .navbar {
-    background: linear-gradient(135deg, rgba(0, 61, 165, 0.85) 0%, rgba(0, 83, 154, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(0, 61, 165, 0.7) 0%, rgba(0, 82, 154, 0.7) 100%);
     padding: 1rem 0;
     position: sticky;
     top: 0;
@@ -172,7 +177,7 @@ body.dark-mode .navbar {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 61, 165, 0.7);
+    background: rgba(0, 61, 165, 0.5);
     z-index: 1;
 }
 
@@ -610,6 +615,489 @@ body.dark-mode .gallery-item {
     font-size: 0.9rem;
     margin-bottom: 1rem;
     line-height: 1.5;
+}
+
+/* Interactive Quiz Styling */
+#dengueQuiz { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+/* Symptom Checker Styling */
+.symptom-checker-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 4rem 0;
+    transition: var(--transition);
+}
+
+body.dark-mode .symptom-checker-section {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+}
+
+.symptom-checker-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 61, 165, 0.1);
+    transition: var(--transition);
+}
+
+body.dark-mode .symptom-checker-container {
+    background: #2a2a2a;
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+}
+
+.checker-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    animation: slideUp 0.6s ease;
+}
+
+body.dark-mode .checker-title {
+    color: var(--secondary-color);
+}
+
+.checker-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    animation: slideUp 0.8s ease;
+}
+
+body.dark-mode .checker-subtitle {
+    color: #bbb;
+}
+
+/* Symptoms Grid */
+.symptoms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    animation: slideUp 1s ease;
+}
+
+/* Symptom Card */
+.symptom-card {
+    position: relative;
+}
+
+.symptom-input {
+    display: none;
+}
+
+.symptom-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    min-height: 140px;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+body.dark-mode .symptom-label {
+    background: #3a3a3a;
+    border-color: #555;
+    color: var(--text-dark);
+}
+
+.symptom-label i {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.8rem;
+    transition: var(--transition);
+}
+
+.symptom-label span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.symptom-label small {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #999;
+    display: block;
+}
+
+body.dark-mode .symptom-label small {
+    color: #aaa;
+}
+
+/* Checked State */
+.symptom-input:checked + .symptom-label {
+    background: linear-gradient(135deg, rgba(0, 61, 165, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    transform: translateY(-5px);
+}
+
+body.dark-mode .symptom-input:checked + .symptom-label {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(0, 61, 165, 0.2) 100%);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+}
+
+.symptom-label:hover {
+    border-color: var(--secondary-color);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+    transform: translateY(-3px);
+}
+
+.symptom-label:hover i {
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+.checker-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.btn-analyze,
+.btn-reset {
+    padding: 0.9rem 2.5rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+}
+
+.btn-analyze {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #e5c158 100%);
+    color: var(--primary-color);
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-analyze:hover {
+    background: linear-gradient(135deg, #e5c158 0%, var(--secondary-color) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.btn-reset {
+    background: #f0f0f0;
+    color: var(--text-light);
+    border: 2px solid #ddd;
+}
+
+body.dark-mode .btn-reset {
+    background: #3a3a3a;
+    color: var(--text-dark);
+    border-color: #555;
+}
+
+.btn-reset:hover {
+    background: #e0e0e0;
+    border-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+body.dark-mode .btn-reset:hover {
+    background: #4a4a4a;
+}
+
+/* Result Container */
+.result-container {
+    background: linear-gradient(135deg, rgba(0, 61, 165, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 5px solid var(--secondary-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    animation: slideUp 0.5s ease;
+}
+
+body.dark-mode .result-container {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(0, 61, 165, 0.15) 100%);
+}
+
+.result-content {
+    text-align: center;
+}
+
+/* Risk Level Styles */
+.risk-level {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.risk-high {
+    background: #ffe6e6;
+    color: #a31a1a;
+    border: 2px solid #d4534f;
+}
+
+.risk-medium {
+    background: #fff4e6;
+    color: #b8860b;
+    border: 2px solid #d4af37;
+}
+
+.risk-low {
+    background: #e6f7ff;
+    color: #003d82;
+    border: 2px solid #0052a3;
+}
+
+body.dark-mode .risk-high {
+    background: rgba(212, 83, 79, 0.2);
+    color: #ff8080;
+}
+
+body.dark-mode .risk-medium {
+    background: rgba(212, 175, 55, 0.2);
+    color: #ffd699;
+}
+
+body.dark-mode .risk-low {
+    background: rgba(0, 82, 154, 0.2);
+    color: #80c0ff;
+}
+
+.result-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+body.dark-mode .result-title {
+    color: var(--secondary-color);
+}
+
+.result-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+body.dark-mode .result-description {
+    color: #ccc;
+}
+
+.recommendations {
+    text-align: left;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+body.dark-mode .recommendations {
+    background: #1a1a1a;
+}
+
+.recommendations h4 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+body.dark-mode .recommendations h4 {
+    color: var(--secondary-color);
+}
+
+.recommendations ul {
+    list-style: none;
+    padding: 0;
+}
+
+.recommendations li {
+    padding: 0.7rem 0;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    gap: 0.8rem;
+}
+
+body.dark-mode .recommendations li {
+    color: #ccc;
+    border-bottom-color: #444;
+}
+
+.recommendations li:before {
+    content: '✓';
+    color: var(--secondary-color);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.recommendations li:last-child {
+    border-bottom: none;
+}
+
+.action-button {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.action-button:hover {
+    background: #e5c158;
+    transform: translateY(-2px);
+}
+
+/* Info Box */
+.info-box {
+    background: rgba(0, 61, 165, 0.05);
+    border: 1px solid rgba(0, 61, 165, 0.2);
+    padding: 1.2rem;
+    border-radius: 10px;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+body.dark-mode .info-box {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.2);
+}
+
+.info-box i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+body.dark-mode .info-box i {
+    color: var(--secondary-color);
+}
+
+.info-box p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+body.dark-mode .info-box p {
+    color: #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .symptom-checker-container {
+        padding: 1.5rem;
+    }
+
+    .checker-title {
+        font-size: 1.5rem;
+    }
+
+    .symptoms-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .checker-actions {
+        flex-direction: column;
+    }
+
+    .btn-analyze,
+    .btn-reset {
+        width: 100%;
+        justify-content: center;
+        min-width: unset;
+    }
+
+    .symptom-label {
+        min-height: 120px;
+        padding: 1rem;
+    }
+
+    .symptom-label i {
+        font-size: 2rem;
+    }
+
+    .result-container {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .symptom-checker-container {
+        padding: 1rem;
+    }
+
+    .checker-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .checker-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .symptoms-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .symptom-label {
+        min-height: 110px;
+        padding: 0.8rem;
+    }
+
+    .symptom-label i {
+        font-size: 1.8rem;
+    }
+
+    .symptom-label span {
+        font-size: 0.9rem;
+    }
+
+    .symptom-label small {
+        font-size: 0.75rem;
+    }
+
+    .btn-analyze,
+    .btn-reset {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+        gap: 0.5rem;
+    }
+
+    .result-level {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .info-box {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
 }
 
 /* Insurance Panels */

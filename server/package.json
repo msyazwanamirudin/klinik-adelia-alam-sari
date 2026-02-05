@@ -1,0 +1,16 @@
+{
+  "name": "klinik-adelia-server",
+  "version": "1.0.0",
+  "description": "Simple backend to receive appointments for Klinik Adelia Alam Sari",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "nanoid": "^4.0.0"
+  }
+}

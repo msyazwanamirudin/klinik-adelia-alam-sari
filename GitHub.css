@@ -528,7 +528,7 @@ body.dark-mode .gallery-container h2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    max-width: 650px;
+    max-width: 100%;
     margin: 0 auto;
 }
 

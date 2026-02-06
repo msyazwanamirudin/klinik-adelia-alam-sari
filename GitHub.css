@@ -659,8 +659,7 @@ body.dark-mode .gallery-item {
 .gallery-item:has(video)::before {
     display: none;
 }
-    color: white;
-}
+
 
 .gallery-item:hover .gallery-overlay {
     opacity: 1;

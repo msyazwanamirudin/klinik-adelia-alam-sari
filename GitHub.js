@@ -81,12 +81,12 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Appointment Form Submission
+// Appointment Form Submission — posts to backend (if available) then opens WhatsApp
 const appointmentForm = document.getElementById('appointmentForm');
 if (appointmentForm) {
-    appointmentForm.addEventListener('submit', (e) => {
+    appointmentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const fullName = document.getElementById('fullName').value;
         const email = document.getElementById('email').value;
         const phone = document.getElementById('phone').value;
@@ -94,10 +94,42 @@ if (appointmentForm) {
         const service = document.getElementById('service').value;
         const message = document.getElementById('message').value;
 
+        const payload = {
+            fullName,
+            email,
+            phone,
+            preferredDate,
+            service,
+            message
+        };
+
+        // Try to send to backend (local or deployed). This is non-blocking — if backend is unavailable we still proceed.
+        const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:3000'
+            : ''; // set to your deployed backend URL when ready
+
+        if (BACKEND_URL) {
+            // race fetch with timeout so it doesn't block the user
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 3000);
+            try {
+                await fetch(`${BACKEND_URL}/appointments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+            } catch (err) {
+                console.warn('Appointment POST failed or timed out', err);
+            } finally {
+                clearTimeout(timeout);
+            }
+        }
+
+        // Always open WhatsApp with filled message
         const whatsappNumber = '60174820090';
-        const whatsappMessage = `Hello, I would like to book an appointment.\n\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nPreferred Date: ${preferredDate}\nService: ${service}\nMessage: ${message}`;
-        
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+        const whatsappMessage = `Hello, I would like to book an appointment.%0A%0AName: ${fullName}%0AEmail: ${email}%0APhone: ${phone}%0APreferred Date: ${preferredDate}%0AService: ${service}%0AMessage: ${message}`;
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
         window.open(whatsappUrl, '_blank');
 
         appointmentForm.reset();
